@@ -1,0 +1,39 @@
+# Configuration pour désactiver Jekyll sur GitHub Pages
+# Ce fichier force GitHub Pages à traiter le site comme du HTML statique
+
+# Désactiver Jekyll
+exclude: 
+  - "*.md"
+  - "*.txt"
+  - "docs/"
+  - "src/"
+  - "rust/"
+  - "tests/"
+  - "*.py"
+  - "*.rs"
+  - "*.sh"
+  - "*.bat"
+  - "*.json"
+  - "*.yml"
+  - "*.yaml"
+  - "README*"
+  - "DEPLOYMENT*"
+  - "GITHUB_*"
+  - "QUICK_START*"
+  - "START_HERE*"
+  - "CLAW*"
+  - "PARITY*"
+
+# Inclure seulement les fichiers nécessaires pour le site web
+include:
+  - "index.html"
+  - ".nojekyll"
+
+# Plugins - aucun
+plugins: []
+
+# Pas de thème
+theme: null
+
+# Pas de layout par défaut
+defaults: []
