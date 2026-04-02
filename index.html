@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claw Code - Agent Harness Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: white;
+            padding: 40px 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3em;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        .tags {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #666;
+            margin-top: 10px;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .card p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #764ba2;
+        }
+
+        button.secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        button.secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .list-section {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .list-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .list-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-name {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .item-hint {
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        .badge {
+            background: #667eea;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+        }
+
+        .footer {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            color: #666;
+        }
+
+        .footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .error {
+            background: #fee;
+            color: #c00;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .success {
+            background: #efe;
+            color: #0c0;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #667eea;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🦀 Claw Code</h1>
+            <p class="subtitle">Agent Harness Platform - Python & Rust Workspace</p>
+            <div class="tags">
+                <span class="tag">Python</span>
+                <span class="tag">Rust</span>
+                <span class="tag">Agent Harness</span>
+                <span class="tag">GitHub Actions</span>
+            </div>
+        </header>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="file-count">67</div>
+                <div class="stat-label">Python Files</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="command-count">207</div>
+                <div class="stat-label">Commands</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="tool-count">184</div>
+                <div class="stat-label">Tools</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">2</div>
+                <div class="stat-label">Implementations</div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="card">
+                <h2>🐍 Python Workspace</h2>
+                <p>Clean-room Python port of Claw Code harness with modular architecture for agent orchestration.</p>
+                <div class="buttons">
+                    <button onclick="openLink('https://github.com/neshop8/claw-code/tree/main/src')">View Source</button>
+                    <button class="secondary" onclick="copyCommand('python -m src.main summary')">Copy Command</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>🦀 Rust Implementation</h2>
+                <p>High-performance Rust CLI with memory-safe agent runtime for production deployments.</p>
+                <div class="buttons">
+                    <button onclick="openLink('https://github.com/neshop8/claw-code/tree/main/rust')">View Source</button>
+                    <button class="secondary" onclick="copyCommand('cargo build --release')">Copy Command</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>🐳 Docker Deploy</h2>
+                <p>Containerized deployment ready for Kubernetes, AWS, or any cloud platform.</p>
+                <div class="buttons">
+                    <button onclick="openLink('https://github.com/neshop8/claw-code/pkgs/container/claw-code')">View Packages</button>
+                    <button class="secondary" onclick="copyCommand('docker build -f Dockerfile.rust .')">Copy Command</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="list-section">
+            <h3>📚 Top Commands</h3>
+            <input type="text" class="search-box" id="command-search" placeholder="Search commands...">
+            <div id="commands-list" style="max-height: 400px; overflow-y: auto;">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    Loading commands...
+                </div>
+            </div>
+        </div>
+
+        <div class="list-section">
+            <h3>🛠️ Top Tools</h3>
+            <input type="text" class="search-box" id="tool-search" placeholder="Search tools...">
+            <div id="tools-list" style="max-height: 400px; overflow-y: auto;">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    Loading tools...
+                </div>
+            </div>
+        </div>
+
+        <div class="list-section">
+            <h3>⚙️ Quick Start</h3>
+            <div style="background: #f8f8f8; padding: 15px; border-radius: 5px; font-family: monospace; overflow-x: auto;">
+                <p style="color: #666; margin-bottom: 10px;">Clone and run locally:</p>
+                <code style="color: #333;">
+git clone https://github.com/neshop8/claw-code.git<br>
+cd claw-code<br>
+python -m src.main summary
+                </code>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <h3>🚀 Claw Code</h3>
+            <p>Python & Rust agent harness for orchestrating AI workflows</p>
+            <div class="links">
+                <a href="https://github.com/neshop8/claw-code" target="_blank">📍 GitHub</a>
+                <a href="https://github.com/neshop8/claw-code/actions" target="_blank">⚙️ Actions</a>
+                <a href="https://github.com/neshop8/claw-code/releases" target="_blank">📦 Releases</a>
+                <a href="https://github.com/neshop8/claw-code/tree/main/docs" target="_blank">📖 Docs</a>
+            </div>
+            <p style="margin-top: 20px; font-size: 0.9em;">Built with Python, Rust, Docker & GitHub Actions</p>
+        </footer>
+    </div>
+
+    <script>
+        // Mock data (in production, this would come from API)
+        const mockCommands = [
+            { name: 'add-dir', hint: 'commands/add-dir/add-dir.tsx' },
+            { name: 'advisor', hint: 'commands/advisor.ts' },
+            { name: 'agents', hint: 'commands/agents/agents.tsx' },
+            { name: 'ant-trace', hint: 'commands/ant-trace/index.js' },
+            { name: 'autofix-pr', hint: 'commands/autofix-pr/index.js' },
+            { name: 'backfill-sessions', hint: 'commands/backfill-sessions/index.js' },
+            { name: 'branch', hint: 'commands/branch/branch.ts' },
+            { name: 'build', hint: 'commands/build/build.tsx' },
+            { name: 'cache', hint: 'commands/cache/cache.ts' },
+            { name: 'commit', hint: 'commands/commit/commit.tsx' },
+        ];
+
+        const mockTools = [
+            { name: 'AgentTool', hint: 'tools/AgentTool/AgentTool.tsx' },
+            { name: 'FileEditTool', hint: 'tools/FileEditTool/FileEditTool.tsx' },
+            { name: 'WebFetchTool', hint: 'tools/WebFetchTool/WebFetchTool.tsx' },
+            { name: 'ShellTool', hint: 'tools/ShellTool/ShellTool.tsx' },
+            { name: 'SearchTool', hint: 'tools/SearchTool/SearchTool.tsx' },
+            { name: 'TodoTool', hint: 'tools/TodoTool/TodoTool.tsx' },
+            { name: 'NotebookTool', hint: 'tools/NotebookTool/NotebookTool.tsx' },
+            { name: 'MemoryTool', hint: 'tools/MemoryTool/MemoryTool.tsx' },
+            { name: 'ExportTool', hint: 'tools/ExportTool/ExportTool.tsx' },
+            { name: 'ConfigTool', hint: 'tools/ConfigTool/ConfigTool.tsx' },
+        ];
+
+        function renderList(items, containerId, searchInputId) {
+            const container = document.getElementById(containerId);
+            const searchInput = document.getElementById(searchInputId);
+            
+            function render(filter = '') {
+                const filtered = items.filter(item =>
+                    item.name.toLowerCase().includes(filter.toLowerCase()) ||
+                    item.hint.toLowerCase().includes(filter.toLowerCase())
+                );
+
+                container.innerHTML = filtered.map(item => `
+                    <div class="list-item">
+                        <div>
+                            <div class="item-name">${item.name}</div>
+                            <div class="item-hint">${item.hint}</div>
+                        </div>
+                        <button class="secondary" onclick="copyCommand('${item.name}')" style="padding: 5px 10px; font-size: 0.9em;">Copy</button>
+                    </div>
+                `).join('');
+
+                if (filtered.length === 0) {
+                    container.innerHTML = '<div style="text-align: center; color: #999; padding: 20px;">No items found</div>';
+                }
+            }
+
+            render();
+            searchInput.addEventListener('input', (e) => render(e.target.value));
+        }
+
+        function copyCommand(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Copied: ' + text);
+            });
+        }
+
+        function openLink(url) {
+            window.open(url, '_blank');
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            renderList(mockCommands, 'commands-list', 'command-search');
+            renderList(mockTools, 'tools-list', 'tool-search');
+        });
+    </script>
+</body>
+</html>
