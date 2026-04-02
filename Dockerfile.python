@@ -1,0 +1,17 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Copy the entire workspace
+COPY . .
+
+# Install the package
+RUN pip install --no-cache-dir -e .
+
+# Create a non-root user
+RUN useradd -m claw && chown -R claw:claw /app
+USER claw
+
+# Default command
+ENTRYPOINT ["claw-python"]
+CMD ["summary"]

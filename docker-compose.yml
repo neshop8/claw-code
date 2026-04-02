@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  # Python workspace (optional)
+  claw-python:
+    build:
+      context: .
+      dockerfile: Dockerfile.python
+    container_name: claw-python
+    environment:
+      - PYTHONUNBUFFERED=1
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - ANTHROPIC_BASE_URL=${ANTHROPIC_BASE_URL:-https://api.anthropic.com}
+    volumes:
+      - ./src:/app/src:ro
+      - ./tests:/app/tests:ro
+    command: turn-loop "explain the workspace" --max-turns 2
+    networks:
+      - claw-network
+
+  # Rust CLI (production)
+  claw-rust:
+    build:
+      context: .
+      dockerfile: Dockerfile.rust
+    container_name: claw-rust
+    stdin_open: true
+    tty: true
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - ANTHROPIC_BASE_URL=${ANTHROPIC_BASE_URL:-https://api.anthropic.com}
+      - XAI_API_KEY=${XAI_API_KEY}
+      - XAI_BASE_URL=${XAI_BASE_URL}
+    volumes:
+      - ~/.claw:/home/claw/.claw:rw
+      - ./workspace:/workspace:rw
+    working_dir: /workspace
+    command: --help
+    networks:
+      - claw-network
+
+networks:
+  claw-network:
+    driver: bridge

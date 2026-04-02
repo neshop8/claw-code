@@ -1,0 +1,35 @@
+# Build stage
+FROM rust:1.75 as builder
+
+WORKDIR /build
+
+# Copy Cargo files
+COPY rust/Cargo.toml rust/Cargo.lock ./
+
+# Copy source code
+COPY rust/crates ./crates
+
+# Build the release binary
+RUN cargo build --release -p claw-cli
+
+# Runtime stage
+FROM debian:bookworm-slim
+
+RUN apt-get update && apt-get install -y \
+    ca-certificates \
+    curl \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Copy the binary from builder
+COPY --from=builder /build/target/release/claw /usr/local/bin/claw
+
+# Create a non-root user
+RUN useradd -m claw && chown -R claw:claw /app
+USER claw
+
+# Default command
+ENTRYPOINT ["claw"]
+CMD ["--help"]
